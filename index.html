@@ -76,20 +76,16 @@
 
   <!-- ══ OVERVIEW TAB ══════════════════════════════════════════════════ -->
   <div id="tab-overview" class="tab-content">
-    <div class="overview-maps">
-      <div class="overview-map-block">
-        <div class="map-block-header">
-          <span>All Areas</span>
-          <span class="map-hint">All pins, boundaries, gates, tracks</span>
-        </div>
-        <div id="overviewAreaMap" class="map-div"></div>
+    <div class="overview-toggle-bar">
+      <button class="overview-toggle-btn active" id="ovBtn-area" onclick="Overview.show('area')">All Areas</button>
+      <button class="overview-toggle-btn"        id="ovBtn-shot" onclick="Overview.show('shot')">All Shots</button>
+    </div>
+    <div class="overview-map-wrap">
+      <div id="overviewAreaPane" class="overview-pane">
+        <div id="overviewAreaMap" class="map-div map-overview"></div>
       </div>
-      <div class="overview-map-block">
-        <div class="map-block-header">
-          <span>All Shots</span>
-          <span class="map-hint">Shots + boundaries</span>
-        </div>
-        <div id="overviewShotMap" class="map-div"></div>
+      <div id="overviewShotPane" class="overview-pane hidden">
+        <div id="overviewShotMap" class="map-div map-overview"></div>
       </div>
     </div>
   </div>
@@ -188,6 +184,21 @@
 <script src="js/app.js"></script>
 
 <script>
+// Overview map toggle
+const Overview = {
+  show(which) {
+    ['area','shot'].forEach(k => {
+      document.getElementById('overviewAreaPane' === `overview${k.charAt(0).toUpperCase()+k.slice(1)}Pane` ? 'overviewAreaPane' : 'overviewShotPane');
+    });
+    document.getElementById('overviewAreaPane').classList.toggle('hidden', which !== 'area');
+    document.getElementById('overviewShotPane').classList.toggle('hidden', which !== 'shot');
+    document.getElementById('ovBtn-area').classList.toggle('active', which === 'area');
+    document.getElementById('ovBtn-shot').classList.toggle('active', which === 'shot');
+    // Invalidate so Leaflet redraws correctly when pane becomes visible
+    setTimeout(() => MapModule.invalidateAll(), 50);
+  }
+};
+
 // Deer dropdown toggle
 function toggleDeerMenu(e) {
   e.stopPropagation();

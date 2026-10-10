@@ -306,53 +306,59 @@ html, body {
   min-height: 0;
 }
 
-/* ── Overview maps ───────────────────────────────────────────────────── */
-.overview-maps {
+/* ── Overview toggle bar ─────────────────────────────────────────────── */
+.overview-toggle-bar {
   display: flex;
-  flex-direction: column;
   gap: 0;
-  height: 100%;
-}
-
-.overview-map-block {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  border-bottom: 2px solid var(--border);
-}
-
-.map-block-header {
-  padding: 6px 12px;
   background: var(--bg-card2);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--gold);
+  border-bottom: 2px solid var(--border);
   flex-shrink: 0;
 }
 
-.map-hint { color: var(--text-muted); font-weight: 400; font-size: 0.75rem; }
+.overview-toggle-btn {
+  flex: 1;
+  padding: 10px 0;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
 
+.overview-toggle-btn.active {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+
+.overview-map-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.overview-pane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.overview-pane.hidden { display: none; }
+
+/* ── Map divs ────────────────────────────────────────────────────────── */
 .map-div {
   flex: 1;
   width: 100%;
-  min-height: 240px;
+  min-height: 260px;
   background: #1a2a1f;
-  /* Prevent map from eating all touch scroll events on mobile */
-  touch-action: none;
 }
 
-/* On mobile, cap map height so users can scroll past */
-@media (max-width: 767px) {
-  .map-div {
-    max-height: 42vh;
-    min-height: 180px;
-  }
-  .overview-map-block {
-    max-height: 50vh;
-  }
+.map-overview {
+  height: calc(100vh - 180px);
+  min-height: 300px;
 }
 
 /* ── Species layout ──────────────────────────────────────────────────── */
@@ -759,15 +765,9 @@ textarea { resize: vertical; min-height: 70px; }
     overflow-y: auto;
   }
 
-  .overview-maps {
-    flex-direction: row;
+  .map-overview {
+    height: calc(100vh - 160px);
   }
-
-  .overview-map-block {
-    border-bottom: none;
-    border-right: 1px solid var(--border);
-  }
-  .overview-map-block:last-child { border-right: none; }
 
   .popup-overlay {
     align-items: center;
