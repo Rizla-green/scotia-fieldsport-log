@@ -25,8 +25,8 @@ const DROPBOX_CONFIG = {
 // OpenWeatherMap — set your own key here
 const WEATHER_CONFIG = {
   apiKey: "a37dd4f86a45ae919d1f0624a6b88bff",
-  defaultLat: 54.738,
-  defaultLon: -4.418   // DG9 0PD
+  defaultLat: 54.978,
+  defaultLon: -5.078   // DG9 0PD (Kirkcolm, Stranraer)
 };
 
 // Hardcoded users (no Firebase Auth)
@@ -56,5 +56,5 @@ const SPECIES = [
   { id: "goat",      label: "Goats",      colour: "#708090" }
 ];
 
-// Map start — DG9 0PD (Whithorn area, Wigtownshire)
-const MAP_START = { lat: 54.738, lon: -4.418, zoom: 13 };
+// Map start — DG9 0PD (Kirkcolm, near Stranraer)
+const MAP_START = { lat: 54.978, lon: -5.078, zoom: 13 };

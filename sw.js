@@ -1,7 +1,7 @@
 // Scotia Fieldsport Log — Service Worker
 // Cache-first for app shell; network-first for Firestore/API calls
 
-const CACHE_NAME = 'sfl-v1.0.0';
+const CACHE_NAME = 'sfl-v1.0.6';
 const APP_SHELL = [
   '/',
   '/index.html',

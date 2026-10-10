@@ -148,6 +148,13 @@ html, body {
   text-overflow: ellipsis;
 }
 
+.tb-version {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 .top-bar-right {
   display: flex;
   align-items: center;
