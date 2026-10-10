@@ -148,6 +148,13 @@ html, body {
   text-overflow: ellipsis;
 }
 
+.tb-version {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 .top-bar-right {
   display: flex;
   align-items: center;
@@ -304,41 +311,71 @@ html, body {
   overflow-y: auto;
   overflow-x: hidden;
   min-height: 0;
-}
-
-/* ── Overview maps ───────────────────────────────────────────────────── */
-.overview-maps {
   display: flex;
   flex-direction: column;
+}
+
+/* Overview tab must NOT scroll — map fills remaining space */
+#tab-overview {
+  overflow: hidden;
+}
+
+/* ── Overview toggle bar ─────────────────────────────────────────────── */
+.overview-toggle-bar {
+  display: flex;
   gap: 0;
-  height: 100%;
-}
-
-.overview-map-block {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  border-bottom: 2px solid var(--border);
-}
-
-.map-block-header {
-  padding: 6px 12px;
   background: var(--bg-card2);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--gold);
+  border-bottom: 2px solid var(--border);
   flex-shrink: 0;
 }
 
-.map-hint { color: var(--text-muted); font-weight: 400; font-size: 0.75rem; }
+.overview-toggle-btn {
+  flex: 1;
+  padding: 10px 0;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
 
+.overview-toggle-btn.active {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+
+.overview-map-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.overview-pane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.overview-pane.hidden { display: none; }
+
+/* Leaflet map fills the pane — explicit height so Leaflet can measure it */
+.overview-map-div {
+  width: 100%;
+  height: calc(100vh - 180px);
+  background: #1a2a1f;
+}
+
+/* ── Map divs (species tabs) ─────────────────────────────────────────── */
 .map-div {
   flex: 1;
   width: 100%;
-  min-height: 240px;
+  min-height: 200px;
   background: #1a2a1f;
 }
 
@@ -746,15 +783,7 @@ textarea { resize: vertical; min-height: 70px; }
     overflow-y: auto;
   }
 
-  .overview-maps {
-    flex-direction: row;
-  }
-
-  .overview-map-block {
-    border-bottom: none;
-    border-right: 1px solid var(--border);
-  }
-  .overview-map-block:last-child { border-right: none; }
+  /* overview map div keeps its explicit height on desktop too */
 
   .popup-overlay {
     align-items: center;
@@ -775,5 +804,7 @@ textarea { resize: vertical; min-height: 70px; }
 /* ── Safe area insets (iPhone notch/home bar) ─────────────────────────── */
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
   .tab-content { padding-bottom: env(safe-area-inset-bottom); }
+  /* Overview tab must not get extra padding — map fills full height */
+  #tab-overview { padding-bottom: 0; }
   .popup-card  { padding-bottom: calc(32px + env(safe-area-inset-bottom)); }
 }

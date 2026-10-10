@@ -219,11 +219,23 @@ const MapModule = (() => {
 
   // ── Overview maps ──────────────────────────────────────────────────────
   function initOverviewMaps() {
-    if (!overviewShotMap) {
-      overviewShotMap = initMap('overviewShotMap', { zoom: 12 });
-    }
     if (!overviewAreaMap) {
       overviewAreaMap = initMap('overviewAreaMap', { zoom: 12 });
+      if (overviewAreaMap) {
+        [100, 300, 600].forEach(ms => setTimeout(() => {
+          overviewAreaMap.invalidateSize();
+          overviewAreaMap.setView([MAP_START.lat, MAP_START.lon], 12);
+        }, ms));
+      }
+    }
+    if (!overviewShotMap) {
+      overviewShotMap = initMap('overviewShotMap', { zoom: 12 });
+      if (overviewShotMap) {
+        [100, 300, 600].forEach(ms => setTimeout(() => {
+          overviewShotMap.invalidateSize();
+          overviewShotMap.setView([MAP_START.lat, MAP_START.lon], 12);
+        }, ms));
+      }
     }
   }
 
