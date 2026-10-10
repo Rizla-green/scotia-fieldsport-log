@@ -60,10 +60,9 @@
     <button class="pill-tab"        data-tab="fox"        onclick="AppUI.activateTab('fox')">Fox</button>
     <!-- Deer dropdown pill -->
     <div class="deer-pill-wrapper">
-      <button class="pill-tab" data-tab="deer" onclick="AppUI.activateTab('deer')">
-        <span class="deer-dropdown-label">Deer</span> <span class="deer-arrow">▾</span>
+      <button class="pill-tab" data-tab="deer" onclick="toggleDeerMenu(event)">
+        <span class="deer-dropdown-label">Deer</span> ▾
       </button>
-      <button class="deer-toggle-btn" onclick="toggleDeerMenu(event)">▾</button>
       <div class="deer-sub-menu hidden" id="deerSubMenu">
         <button onclick="AppUI.setDeerSpecies('red')">Red Deer</button>
         <button onclick="AppUI.setDeerSpecies('roe')">Roe Deer</button>
@@ -80,17 +79,17 @@
     <div class="overview-maps">
       <div class="overview-map-block">
         <div class="map-block-header">
-          <span>All Shots</span>
-          <span class="map-hint">Shots + boundaries</span>
-        </div>
-        <div id="overviewShotMap" class="map-div"></div>
-      </div>
-      <div class="overview-map-block">
-        <div class="map-block-header">
           <span>All Areas</span>
           <span class="map-hint">All pins, boundaries, gates, tracks</span>
         </div>
         <div id="overviewAreaMap" class="map-div"></div>
+      </div>
+      <div class="overview-map-block">
+        <div class="map-block-header">
+          <span>All Shots</span>
+          <span class="map-hint">Shots + boundaries</span>
+        </div>
+        <div id="overviewShotMap" class="map-div"></div>
       </div>
     </div>
   </div>
@@ -192,7 +191,13 @@
 // Deer dropdown toggle
 function toggleDeerMenu(e) {
   e.stopPropagation();
-  document.getElementById('deerSubMenu').classList.toggle('hidden');
+  const menu = document.getElementById('deerSubMenu');
+  const isHidden = menu.classList.contains('hidden');
+  menu.classList.toggle('hidden', !isHidden);
+  if (isHidden) {
+    // Also activate the deer tab
+    AppUI.activateTab('deer');
+  }
 }
 document.addEventListener('click', () => {
   document.getElementById('deerSubMenu')?.classList.add('hidden');
