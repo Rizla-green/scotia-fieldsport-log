@@ -24,7 +24,7 @@ const DROPBOX_CONFIG = {
 
 // OpenWeatherMap — set your own key here
 const WEATHER_CONFIG = {
-  apiKey: "PASTE_YOUR_OPENWEATHERMAP_KEY_HERE",
+  apiKey: "a37dd4f86a45ae919d1f0624a6b88bff",
   defaultLat: 54.877,
   defaultLon: -4.132   // DG9 0PD centre point
 };

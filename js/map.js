@@ -19,13 +19,17 @@ const MapModule = (() => {
   const boundaryPolys = {};
 
   // ── Leaflet tile layers ────────────────────────────────────────────────
-  const ESRI_SAT = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
-  const OSM_LABELS = 'https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png';
+  // Satellite: Google hybrid via open proxy (no key needed)
+  const GOOGLE_SAT   = 'https://mt{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}';
+  const GOOGLE_HYBRID = 'https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}';
 
   function makeTileLayers() {
     return [
-      L.tileLayer(ESRI_SAT, { attribution: 'Esri', maxZoom: 19 }),
-      L.tileLayer(OSM_LABELS, { attribution: '© OpenStreetMap', maxZoom: 19, opacity: 0.8 })
+      L.tileLayer(GOOGLE_HYBRID, {
+        attribution: '© Google Maps',
+        subdomains: ['0','1','2','3'],
+        maxZoom: 21
+      })
     ];
   }
 
