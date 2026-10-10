@@ -1,7 +1,7 @@
 // Scotia Fieldsport Log — Service Worker
 // Cache-first for app shell; network-first for Firestore/API calls
 
-const CACHE_NAME = 'sfl-v1.0.8';
+const CACHE_NAME = 'sfl-v1.0.9';
 const APP_SHELL = [
   '/',
   '/index.html',
@@ -51,12 +51,18 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   const url = e.request.url;
 
-  // Network-only: Firebase, APIs
+  // Network-only: Firebase, APIs, Google tiles, Dropbox
   if (url.includes('firestore.googleapis.com') ||
       url.includes('openweathermap.org') ||
       url.includes('api.dropbox') ||
+      url.includes('content.dropboxapi.com') ||
       url.includes('cloudinary.com') ||
-      url.includes('gstatic.com/firebasejs')) {
+      url.includes('gstatic.com/firebasejs') ||
+      url.includes('mt.google.com') ||
+      url.includes('mt0.google.com') ||
+      url.includes('mt1.google.com') ||
+      url.includes('mt2.google.com') ||
+      url.includes('mt3.google.com')) {
     e.respondWith(fetch(e.request));
     return;
   }

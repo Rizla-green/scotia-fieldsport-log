@@ -783,7 +783,7 @@ textarea { resize: vertical; min-height: 70px; }
     overflow-y: auto;
   }
 
-  /* overview maps use position:absolute fill — no height override needed */
+  /* overview map div keeps its explicit height on desktop too */
 
   .popup-overlay {
     align-items: center;
@@ -804,5 +804,7 @@ textarea { resize: vertical; min-height: 70px; }
 /* ── Safe area insets (iPhone notch/home bar) ─────────────────────────── */
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
   .tab-content { padding-bottom: env(safe-area-inset-bottom); }
+  /* Overview tab must not get extra padding — map fills full height */
+  #tab-overview { padding-bottom: 0; }
   .popup-card  { padding-bottom: calc(32px + env(safe-area-inset-bottom)); }
 }

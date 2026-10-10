@@ -84,11 +84,17 @@ const AppUI = (() => {
 
     if (tab === 'overview') {
       if (!overviewDone) {
-        MapModule.initOverviewMaps();
-        overviewDone = true;
+        // Defer Leaflet init so the browser has laid out appScreen before
+        // Leaflet measures offsetHeight (otherwise it gets 0 and stays blank)
+        setTimeout(() => {
+          MapModule.initOverviewMaps();
+          overviewDone = true;
+          MapModule.renderOverview(allPins, allBoundaries, allGates);
+        }, 100);
+      } else {
+        MapModule.renderOverview(allPins, allBoundaries, allGates);
+        setTimeout(() => MapModule.invalidateAll(), 200);
       }
-      MapModule.renderOverview(allPins, allBoundaries, allGates);
-      setTimeout(() => MapModule.invalidateAll(), 200);
     }
 
     if (['fox','deer','goat'].includes(tab)) {
