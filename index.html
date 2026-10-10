@@ -187,14 +187,11 @@
 // Overview map toggle
 const Overview = {
   show(which) {
-    ['area','shot'].forEach(k => {
-      document.getElementById('overviewAreaPane' === `overview${k.charAt(0).toUpperCase()+k.slice(1)}Pane` ? 'overviewAreaPane' : 'overviewShotPane');
-    });
     document.getElementById('overviewAreaPane').classList.toggle('hidden', which !== 'area');
     document.getElementById('overviewShotPane').classList.toggle('hidden', which !== 'shot');
     document.getElementById('ovBtn-area').classList.toggle('active', which === 'area');
     document.getElementById('ovBtn-shot').classList.toggle('active', which === 'shot');
-    // Invalidate so Leaflet redraws correctly when pane becomes visible
+    // Invalidate + re-centre so Leaflet redraws correctly when pane becomes visible
     setTimeout(() => MapModule.invalidateAll(), 50);
   }
 };
