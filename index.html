@@ -41,7 +41,7 @@
     <div class="top-bar-left">
       <img src="icons/logo-48.png" alt="" class="tb-logo" />
       <span class="tb-title">Scotia Fieldsport Log</span>
-      <span class="tb-version">v1.0.6</span>
+      <span class="tb-version">v1.0.7</span>
     </div>
     <div class="top-bar-right">
       <span id="offlineBadge" class="offline-badge hidden">pending</span>
@@ -83,10 +83,14 @@
     </div>
     <div class="overview-map-wrap">
       <div id="overviewAreaPane" class="overview-pane">
-        <div id="overviewAreaMap" class="map-div map-overview"></div>
+        <div class="overview-map-positioner">
+          <div id="overviewAreaMap"></div>
+        </div>
       </div>
       <div id="overviewShotPane" class="overview-pane hidden">
-        <div id="overviewShotMap" class="map-div map-overview"></div>
+        <div class="overview-map-positioner">
+          <div id="overviewShotMap"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -171,7 +175,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <!-- App modules (order matters) -->
-<script src="js/config.js"></script>
+<script src="js/config.js?v=1.0.7"></script>
 <script src="js/auth.js"></script>
 <script src="js/popup.js"></script>
 <script src="js/db.js"></script>
@@ -192,8 +196,8 @@ const Overview = {
     document.getElementById('overviewShotPane').classList.toggle('hidden', which !== 'shot');
     document.getElementById('ovBtn-area').classList.toggle('active', which === 'area');
     document.getElementById('ovBtn-shot').classList.toggle('active', which === 'shot');
-    // Invalidate + re-centre so Leaflet redraws correctly when pane becomes visible
-    setTimeout(() => MapModule.invalidateAll(), 50);
+    // Invalidate + re-centre after layout settles
+    [50, 200, 400].forEach(ms => setTimeout(() => MapModule.invalidateAll(), ms));
   }
 };
 
