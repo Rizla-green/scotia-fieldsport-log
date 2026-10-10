@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<!-- Scotia Fieldsport Log v1.0.0 -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Scotia Fieldsport Log</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/logo-192.png" />
+  <meta name="theme-color" content="#0f1e14" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
+  <link rel="stylesheet" href="css/app.css" />
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     LOGIN SCREEN
+═══════════════════════════════════════════ -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <img src="icons/logo-192.png" alt="Scotia Fieldsport Log" class="login-logo" />
+    <h1 class="login-title">Scotia Fieldsport Log</h1>
+    <form id="loginForm" class="login-form">
+      <input type="text"     id="loginUsername" placeholder="Username"  autocomplete="username" required />
+      <input type="password" id="loginPassword" placeholder="Password"  autocomplete="current-password" required />
+      <div id="loginError" class="login-error"></div>
+      <button type="submit" class="btn-primary">Log in</button>
+    </form>
+    <div class="login-version">v1.0.0</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     MAIN APP
+═══════════════════════════════════════════ -->
+<div id="appScreen" class="hidden app-screen">
+
+  <!-- ── Top bar ── -->
+  <header class="top-bar">
+    <div class="top-bar-left">
+      <img src="icons/logo-48.png" alt="" class="tb-logo" />
+      <span class="tb-title">Scotia Fieldsport Log</span>
+    </div>
+    <div class="top-bar-right">
+      <span id="offlineBadge" class="offline-badge hidden">pending</span>
+      <select id="userFilterSel" class="user-filter-sel" title="Filter by user"></select>
+      <span id="userInitialBadge" class="user-badge"></span>
+      <button class="icon-btn" onclick="AppUI.activateTab('settings')" title="Settings">⚙</button>
+      <button class="icon-btn" onclick="AppUI.logOut()" title="Log out">↩</button>
+    </div>
+  </header>
+
+  <!-- ── Weather strip ── -->
+  <div id="weatherStrip" class="weather-strip">Loading weather…</div>
+
+  <!-- ── Pill tabs ── -->
+  <nav class="pill-nav">
+    <button class="pill-tab active" data-tab="overview"   onclick="AppUI.activateTab('overview')">Overview</button>
+    <button class="pill-tab"        data-tab="fox"        onclick="AppUI.activateTab('fox')">Fox</button>
+    <!-- Deer dropdown pill -->
+    <div class="deer-pill-wrapper">
+      <button class="pill-tab" data-tab="deer" onclick="AppUI.activateTab('deer')">
+        <span class="deer-dropdown-label">Deer</span> <span class="deer-arrow">▾</span>
+      </button>
+      <button class="deer-toggle-btn" onclick="toggleDeerMenu(event)">▾</button>
+      <div class="deer-sub-menu hidden" id="deerSubMenu">
+        <button onclick="AppUI.setDeerSpecies('red')">Red Deer</button>
+        <button onclick="AppUI.setDeerSpecies('roe')">Roe Deer</button>
+        <button onclick="AppUI.setDeerSpecies('fallow')">Fallow Deer</button>
+        <button onclick="AppUI.setDeerSpecies('sika')">Sika Deer</button>
+      </div>
+    </div>
+    <button class="pill-tab" data-tab="goat"      onclick="AppUI.activateTab('goat')">Goats</button>
+    <button class="pill-tab" data-tab="fieldsync" onclick="AppUI.activateTab('fieldsync')">Field Sync</button>
+  </nav>
+
+  <!-- ══ OVERVIEW TAB ══════════════════════════════════════════════════ -->
+  <div id="tab-overview" class="tab-content">
+    <div class="overview-maps">
+      <div class="overview-map-block">
+        <div class="map-block-header">
+          <span>All Shots</span>
+          <span class="map-hint">Shots + boundaries</span>
+        </div>
+        <div id="overviewShotMap" class="map-div"></div>
+      </div>
+      <div class="overview-map-block">
+        <div class="map-block-header">
+          <span>All Areas</span>
+          <span class="map-hint">All pins, boundaries, gates, tracks</span>
+        </div>
+        <div id="overviewAreaMap" class="map-div"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SPECIES MAP PANEL (shared — moved into app shell, shown via JS) ══ -->
+  <!-- One map div that stays in the DOM, moved between tab panels -->
+  <div id="speciesMapPanel" class="species-layout" style="display:none">
+    <div class="species-map-section">
+      <div class="map-controls" id="speciesMapControls"></div>
+      <div id="mapDropHint" class="map-drop-hint hidden"></div>
+      <div id="mainMap" class="map-div map-species"></div>
+    </div>
+    <div class="species-list-section">
+      <h3 class="list-header" id="speciesListHeader">Shot entries</h3>
+      <div id="speciesListContainer"></div>
+    </div>
+  </div>
+
+  <!-- ══ FOX TAB ═══════════════════════════════════════════════════════ -->
+  <div id="tab-fox" class="tab-content hidden"></div>
+
+  <!-- ══ DEER TAB ══════════════════════════════════════════════════════ -->
+  <div id="tab-deer" class="tab-content hidden"></div>
+
+  <!-- ══ GOAT TAB ══════════════════════════════════════════════════════ -->
+  <div id="tab-goat" class="tab-content hidden"></div>
+
+  <!-- ══ FIELD SYNC TAB ════════════════════════════════════════════════ -->
+  <div id="tab-fieldsync" class="tab-content hidden">
+    <div class="page-section">
+      <h2>Field Sync</h2>
+      <div id="fieldSyncStatus"></div>
+    </div>
+  </div>
+
+  <!-- ══ SETTINGS TAB ══════════════════════════════════════════════════ -->
+  <div id="tab-settings" class="tab-content hidden">
+    <div class="page-section">
+      <h2>Settings</h2>
+
+      <section class="options-section">
+        <h3>Dropbox auto-backup</h3>
+        <p class="options-hint">Connect once and the app backs itself up to Dropbox every 7 days. Keeps the newest 12 backups. Uses your <b>/Apps/ScotiaFieldsportLog</b> folder — separate from any other app.</p>
+        <div class="options-row">
+          <button id="connectDropboxBtn">Connect Dropbox</button>
+          <button id="backupNowBtn" class="hidden">Back up now</button>
+          <button id="disconnectDropboxBtn" class="hidden">Disconnect</button>
+        </div>
+        <div id="dropboxStatus" class="options-status"></div>
+      </section>
+
+      <section class="options-section">
+        <h3>Export all data</h3>
+        <p class="options-hint">Download a CSV of your records, filtered by species, user and date range.</p>
+        <button onclick="Export.showExportDialog()">Export CSV…</button>
+      </section>
+
+      <section class="options-section">
+        <h3>Logged in as</h3>
+        <p id="settingsUser"></p>
+        <button onclick="AppUI.logOut()">Log out</button>
+      </section>
+
+      <div class="options-version">Scotia Fieldsport Log v1.0.0</div>
+    </div>
+  </div>
+
+</div><!-- /appScreen -->
+
+<!-- ── Popup overlay ── -->
+<div id="popupOverlay" class="popup-overlay hidden">
+  <div id="popupCard" class="popup-card"></div>
+</div>
+
+<!-- ═══════ Scripts ═══════ -->
+<!-- Leaflet (CDN — cached by service worker after first load) -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+
+<!-- Firebase 10 compat -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<!-- App modules (order matters) -->
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/popup.js"></script>
+<script src="js/db.js"></script>
+<script src="js/weather.js"></script>
+<script src="js/cloudinary.js"></script>
+<script src="js/dropbox.js"></script>
+<script src="js/export.js"></script>
+<script src="js/map.js"></script>
+<script src="js/pins.js"></script>
+<script src="js/lists.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+// Deer dropdown toggle
+function toggleDeerMenu(e) {
+  e.stopPropagation();
+  document.getElementById('deerSubMenu').classList.toggle('hidden');
+}
+document.addEventListener('click', () => {
+  document.getElementById('deerSubMenu')?.classList.add('hidden');
+});
+</script>
+
+</body>
+</html>
