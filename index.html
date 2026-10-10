@@ -41,7 +41,7 @@
     <div class="top-bar-left">
       <img src="icons/logo-48.png" alt="" class="tb-logo" />
       <span class="tb-title">Scotia Fieldsport Log</span>
-      <span class="tb-version">v1.0.7</span>
+      <span class="tb-version">v1.0.8</span>
     </div>
     <div class="top-bar-right">
       <span id="offlineBadge" class="offline-badge hidden">pending</span>
@@ -83,14 +83,10 @@
     </div>
     <div class="overview-map-wrap">
       <div id="overviewAreaPane" class="overview-pane">
-        <div class="overview-map-positioner">
-          <div id="overviewAreaMap"></div>
-        </div>
+        <div id="overviewAreaMap" class="overview-map-div"></div>
       </div>
       <div id="overviewShotPane" class="overview-pane hidden">
-        <div class="overview-map-positioner">
-          <div id="overviewShotMap"></div>
-        </div>
+        <div id="overviewShotMap" class="overview-map-div"></div>
       </div>
     </div>
   </div>
@@ -175,7 +171,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <!-- App modules (order matters) -->
-<script src="js/config.js?v=1.0.7"></script>
+<script src="js/config.js?v=1.0.8"></script>
 <script src="js/auth.js"></script>
 <script src="js/popup.js"></script>
 <script src="js/db.js"></script>

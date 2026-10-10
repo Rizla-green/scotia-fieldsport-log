@@ -349,26 +349,25 @@ html, body {
 
 .overview-map-wrap {
   flex: 1;
-  position: relative;
+  display: flex;
+  flex-direction: column;
   min-height: 0;
+  overflow: hidden;
 }
 
 .overview-pane {
-  position: absolute;
-  inset: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .overview-pane.hidden { display: none; }
 
-/* positioner fills the pane and Leaflet map fills the positioner */
-.overview-map-positioner {
-  position: absolute;
-  inset: 0;
-}
-
-.overview-map-positioner > div {
+/* Leaflet map fills the pane — explicit height so Leaflet can measure it */
+.overview-map-div {
   width: 100%;
-  height: 100%;
+  height: calc(100vh - 180px);
   background: #1a2a1f;
 }
 
